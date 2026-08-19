@@ -634,7 +634,7 @@ dns:
     rule-set:geosite-private:
       - system
     "*.lan,*.local": [192.168.1.1, system]
-    "rules-set:as-cloudflare,as-hetzner,as-ovh,as-amazon,as-akamai,as-gcore,as-fastly,as-retn,as-google,as-microsoft,as-github,as-apple,as-meta,as-facebook,as-tiktok,as-telegram,as-twitter,as2-twitter,doh,cdn,cloudfront,cloudflare,cloudflare-ip,amazon,akamai,fastly,fastly-ip,oracle,companies,companies-ads,google,google-ip,microsoft,azure,intel,amd,samsung,github,remnawave,apple,apple-ip,apple-pki,itunes,youtube,spotify,telegram,telegram-ip,tiktok,twitch,reddit,adobe,primevideo,netflix,netflix-ip,meta,instagram,facebook,facebook-ip,whatsapp,twitter,twitter-ip,discord,discord-voice,notion,ai,ai-ip,ai-chat,-ai-cn,paypal,stripe,wise,redotpay,bybit,crypto,mega,dropbox,terabox,onedrive,sony,xbox,nvidia,ubisoft,nintendo,blizzard,roblox,modrinth": *dns_proxy
+    "rules-set:as-cloudflare,as-ovh,as-amazon,as-akamai,as2-akamai,as-gcore,as-fastly,as-retn,as-google,as-microsoft,as-github,as-apple,as-meta,as-facebook,as-tiktok,as-telegram,as-twitter,as2-twitter,doh,cdn,cloudfront,cloudflare,cloudflare-ip,amazon,akamai,fastly,fastly-ip,oracle,companies,companies-ads,google,google-ip,microsoft,azure,intel,amd,samsung,github,remnawave,apple,apple-ip,apple-pki,itunes,youtube,spotify,telegram,telegram-ip,tiktok,twitch,reddit,adobe,primevideo,netflix,netflix-ip,meta,instagram,facebook,facebook-ip,whatsapp,twitter,twitter-ip,discord,discord-voice,notion,ai,ai-ip,ai-chat,-ai-cn,paypal,stripe,wise,redotpay,bybit,crypto,mega,dropbox,terabox,onedrive,sony,xbox,nvidia,ubisoft,nintendo,blizzard,roblox,modrinth": *dns_proxy
     "rules-set:as-edgecente,as-selectel,as-vk,as2-vk,as-yandex,as2-yandex,teamspeak,ai-ru,geosite-ru,geoip-ru,tld-ru,bank-ru,bet-ru,media-ru,ecommerce-ru,entertainment-ru,vk,yandex,dzen,rutube,games-direct,faceit,torrent-trackers,torrent-clients": *dns_ru
 
 #proxy-providers:
@@ -660,10 +660,10 @@ rule-providers:
 
 # ASN
   as-cloudflare: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS13335.mrs}
-  as-hetzner: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS24940.mrs}
   as-ovh: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS16276.mrs}
   as-amazon: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS16509.mrs}
   as-akamai: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS200005.mrs}
+  as2-akamai: {<<: *rp_ipcidr,  url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS16625.mrs}
   as-gcore: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS199524.mrs}
   as-fastly: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS54113.mrs}
   as-retn: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS9002.mrs}
@@ -821,9 +821,10 @@ rules:
   - OR,((RULE-SET,as-vk),(RULE-SET,as2-vk)),DIRECT
   - OR,((RULE-SET,as-yandex),(RULE-SET,as2-yandex)),DIRECT
   - OR,((RULE-SET,as-meta),(RULE-SET,as-facebook)),⚫ VPN
+  - OR,((RULE-SET,as-akamai),(RULE-SET,as2-akamai)),⚫ VPN
   - OR,((RULE-SET,as-twitter),(RULE-SET,as2-twitter)),⚫ VPN
   - OR,((RULE-SET,as-cloudflare),(RULE-SET,as-fastly)),⚫ VPN
-  - OR,((RULE-SET,as-hetzner),(RULE-SET,as-ovh),(RULE-SET,as-amazon),(RULE-SET,as-gcore),(RULE-SET,as-akamai)),⚫ VPN
+  - OR,((RULE-SET,as-ovh),(RULE-SET,as-amazon),(RULE-SET,as-gcore)),⚫ VPN
   # DOH & CDN
   - RULE-SET,oracle,⚫ VPN
   - RULE-SET,akamai,⚫ VPN
