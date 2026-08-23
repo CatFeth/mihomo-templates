@@ -297,6 +297,12 @@ rule-providers:
   torrent-trackers: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-trackers.mrs}
   torrent-clients: {<<: *rp_classical, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-clients.yaml}
 
+  # Add
+  oisd_big : {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/big.mrs}
+  oisd_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/small.mrs}
+  oisd_nsfw_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw_small.mrs}
+  oisd_nsfw_big: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw.mrs}
+
 # Quic
   quic:
     type: inline
@@ -312,6 +318,11 @@ rules:
   - RULE-SET,quic,REJECT-DROP
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
+  # Add
+  - RULE-SET,oisd_big,REJECT
+  - RULE-SET,oisd_small,REJECT
+  - RULE-SET,oisd_nsfw_big,REJECT
+  - RULE-SET,oisd_nsfw_small,REJECT
   # Russian Domains & IPs
   - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru),(RULE-SET,tld-ru)),DIRECT
   # Russian Services
