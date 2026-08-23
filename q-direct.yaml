@@ -352,6 +352,7 @@ rules:
   - OR,((RULE-SET,cloudflare),(RULE-SET,cloudflare-ip)),⚫ VPN
   # Services
   - DOMAIN-SUFFIX,deepl.com,⚫ VPN
+  - RULE-SET,win-spy,REJECT
   - RULE-SET,teamspeak,DIRECT
   - RULE-SET,porn,⚫ VPN
   - RULE-SET,adobe,⚫ VPN
@@ -365,13 +366,13 @@ rules:
   - RULE-SET,samsung,⚫ VPN
   - RULE-SET,remnawave,⚫ VPN
   - RULE-SET,primevideo,⚫ VPN
+  - OR,((RULE-SET,microsoft),(RULE-SET,azure)),⚫ VPN
   - OR,((RULE-SET,google),(RULE-SET,google-ip)),⚫ VPN
   - OR,((RULE-SET,netflix),(RULE-SET,netflix-ip)),⚫ VPN
   - OR,((RULE-SET,twitter),(RULE-SET,twitter-ip)),⚫ VPN
   - OR,((RULE-SET,telegram),(RULE-SET,telegram-ip)),⚫ VPN
   - OR,((RULE-SET,discord),(RULE-SET,discord-voice)),⚫ VPN
   - OR,((RULE-SET,companies),(RULE-SET,companies-ads)),⚫ VPN
-  - OR,((RULE-SET,microsoft),(RULE-SET,azure),(RULE-SET,win-spy)),⚫ VPN
   - OR,((RULE-SET,apple),(RULE-SET,apple-ip),(RULE-SET,apple-pki),(RULE-SET,itunes)),⚫ VPN
   - OR,((RULE-SET,meta),(RULE-SET,instagram),(RULE-SET,facebook),(RULE-SET,facebook-ip),(RULE-SET,whatsapp)),⚫ VPN
   # AI
