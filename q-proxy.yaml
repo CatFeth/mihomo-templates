@@ -106,9 +106,9 @@ dns:
     rule-set:geosite-private:
       - system
     "*.lan,*.local": [192.168.1.1, system]
-    "rules-set:cdn,doh,cloudflare,cloudflare-ip,github,youtube,spotify,telegram,telegram-ip,tiktok,twitch,meta,instagram,facebook-facebook-ip,whatsapp,discord,discord-voice": *dns_proxy
-    "rules-set:as-edgecente,as-selectel,as-vk,as2-vk,as-yandex,as2-yandex,teamspeak,geosite-ru,geoip-ru,tld-ru,bank-ru,bet-ru,media-ru,ecommerce-ru,entertainment-ru,ai-ru,vk,yandex,dzen,rutube,games-direct,faceit,torrent-trackers,torrent-clients": *dns_ru
-
+    "rules-set:cdn,doh,cloudflare,cloudflare-ip,amazon,akamai,fastly,fastly-ip,github,youtube,spotify,telegram,telegram-ip,tiktok,twitch,meta,instagram,facebook-facebook-ip,whatsapp,discord,discord-voice": *dns_proxy
+    "rules-set:as-curator@ru,as-edgecente,as-selectel,as-vk,as2-vk,as-yandex,as2-yandex,as-wildberries,teamspeak,ai-ru,geosite-ru,geoip-ru,tld-ru,bank-ru,bet-ru,media-ru,ecommerce-ru,entertainment-ru,vk,yandex,dzen,rutube,games-direct,faceit,torrent-trackers,torrent-clients": *dns_ru
+    
 #proxy-providers:
 
 proxy-groups:
@@ -151,19 +151,27 @@ rule-providers:
       - fe80::/10
       - ff00::/8
 
-# ASN
+# RU ASN
+  as-curator@ru: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS197068.mrs}
+  as-servicepipe: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS201706.mrs}
   as-edgecente: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS210756.mrs}
   as-selectel: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS49505.mrs}
   as-vk: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS47541.mrs}
   as2-vk: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS47764.mrs}
   as-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS13238.mrs}
   as2-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS44534.mrs}
+  as-wildberries: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS57073.mrs}
 
 # DOH & CDN
   cdn: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-cdn-!cn.mrs}
   doh: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-doh.mrs}
+  cloudfront: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cloudfront.mrs}
   cloudflare: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cloudflare.mrs}
   cloudflare-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cloudflare.mrs}
+  amazon: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/amazon.mrs}
+  akamai: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/akamai.mrs}
+  fastly: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/fastly.mrs}
+  fastly-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/fastly.mrs}
 
   # Services
   github: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/github.mrs}
@@ -214,6 +222,12 @@ rule-providers:
   torrent-trackers: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-trackers.mrs}
   torrent-clients: {<<: *rp_classical, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-clients.yaml}
 
+# Add
+  oisd_big : {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/big.mrs}
+  oisd_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/small.mrs}
+  oisd_nsfw_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw_small.mrs}
+  oisd_nsfw_big: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw.mrs}
+
 # Quic
   quic:
     type: inline
@@ -229,13 +243,29 @@ rules:
   - RULE-SET,quic,REJECT-DROP
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
-  # ASN
+  # Add
+  - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_small),(RULE-SET,oisd_nsfw_big),(RULE-SET,oisd_nsfw_small)),REJECT
+  # Russian Domains & IPs
+  - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru),(RULE-SET,tld-ru)),DIRECT
+  # Russian Services
+  - RULE-SET,bank-ru,DIRECT
+  - OR,((RULE-SET,vk),(RULE-SET,rutube)),DIRECT
+  - OR,((RULE-SET,yandex),(RULE-SET,dzen)),DIRECT
+  - OR,((RULE-SET,ecommerce-ru),(RULE-SET,media-ru)),DIRECT
+  - OR,((RULE-SET,entertainment-ru),(RULE-SET,bet-ru)),DIRECT
+  # RU ASN
   - RULE-SET,as-selectel,DIRECT
   - RULE-SET,as-edgecente,DIRECT
+  - RULE-SET,as-curator@ru,DIRECT
+  - RULE-SET,as-wildberries,DIRECT
+  - RULE-SET,as-servicepipe,DIRECT
   - OR,((RULE-SET,as-vk),(RULE-SET,as2-vk)),DIRECT
   - OR,((RULE-SET,as-yandex),(RULE-SET,as2-yandex)),DIRECT
   # DOH & CDN
+  - RULE-SET,akamai,⚫ VPN
   - OR,((RULE-SET,doh),(RULE-SET,cdn)),⚫ VPN
+  - OR,((RULE-SET,fastly),(RULE-SET,fastly-ip)),⚫ VPN
+  - OR,((RULE-SET,cloudfront),(RULE-SET,amazon)),⚫ VPN
   - OR,((RULE-SET,cloudflare),(RULE-SET,cloudflare-ip)),⚫ VPN
   # Services
   - RULE-SET,twitch,⚫ VPN
@@ -247,15 +277,6 @@ rules:
   - OR,((RULE-SET,telegram),(RULE-SET,telegram-ip)),⚫ VPN
   - OR,((RULE-SET,discord),(RULE-SET,discord-voice)),⚫ VPN
   - OR,((RULE-SET,meta),(RULE-SET,instagram),(RULE-SET,facebook),(RULE-SET,facebook-ip),(RULE-SET,whatsapp)),⚫ VPN
-  # Russian Domains & IPs
-  - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru),(RULE-SET,tld-ru)),DIRECT
-  # Russian Services
-  - RULE-SET,ai-ru,DIRECT
-  - RULE-SET,bank-ru,DIRECT
-  - OR,((RULE-SET,vk),(RULE-SET,rutube)),DIRECT
-  - OR,((RULE-SET,yandex),(RULE-SET,dzen)),DIRECT
-  - OR,((RULE-SET,ecommerce-ru),(RULE-SET,media-ru)),DIRECT
-  - OR,((RULE-SET,entertainment-ru),(RULE-SET,bet-ru)),DIRECT
   # Games
   - RULE-SET,faceit,DIRECT
   - RULE-SET,games-direct,DIRECT
