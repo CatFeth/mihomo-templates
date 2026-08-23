@@ -106,8 +106,8 @@ dns:
     rule-set:geosite-private:
       - system
     "*.lan,*.local": [192.168.1.1, system]
-    "rules-set:as-cloudflare,as-hetzner,as-ovh,as-amazon,as-akamai,as2-akamai,as-gcore,as-oracle,as-fastly,as-retn,as-stormwall@eu,as-google,as-microsoft,as-github,as-apple,as-meta,as-facebook,as-tiktok,as-telegram,as-twitter,as2-twitter,doh,cdn,cloudfront,cloudflare,cloudflare-ip,amazon,akamai,fastly,fastly-ip,oracle,companies,companies-ads,google,google-ip,microsoft,win-spy,azure,intel,amd,samsung,github,remnawave,apple,apple-ip,apple-pki,itunes,youtube,spotify,telegram,telegram-ip,tiktok,twitch,reddit,adobe,primevideo,netflix,netflix-ip,meta,instagram,facebook,facebook-ip,whatsapp,twitter,twitter-ip,discord,discord-voice,notion,porn,ai,ai-ip,ai-chat,ai-cn,paypal,stripe,wise,redotpay,bybit,crypto,mega,dropbox,terabox,onedrive,sony,xbox,nvidia,ubisoft,nintendo,blizzard,roblox,modrinth": *dns_proxy
-    "rules-set:as-curator@ru,as-stormwall@ru,as-ddosguard,as-edgecente,as-selectel,as-vk,as2-vk,as-yandex,as2-yandex,as-wildberries,teamspeak,ai-ru,geosite-ru,geoip-ru,tld-ru,bank-ru,bet-ru,media-ru,ecommerce-ru,entertainment-ru,vk,yandex,dzen,rutube,games-direct,faceit,torrent-trackers,torrent-clients": *dns_ru
+    "rules-set:as-cloudflare,as-hetzner,as-ovh,as-amazon,as-akamai,as2-akamai,as-gcore,as-oracle,as-fastly,as-retn,as-stormwall@eu,as-google,as-microsoft,as-github,as-apple,as-meta,as-facebook,as-tiktok,as-telegram,as-twitter,as2-twitter,doh,cdn,cloudfront,cloudflare,cloudflare-ip,amazon,akamai,fastly,fastly-ip,oracle,companies,google,google-ip,microsoft,win-spy,azure,intel,amd,samsung,github,remnawave,apple,apple-ip,apple-pki,itunes,youtube,spotify,telegram,telegram-ip,tiktok,twitch,reddit,adobe,primevideo,netflix,netflix-ip,meta,instagram,facebook,facebook-ip,whatsapp,twitter,twitter-ip,discord,discord-voice,notion,porn,ai,ai-ip,ai-chat,ai-cn,paypal,stripe,wise,redotpay,bybit,crypto,mega,dropbox,terabox,onedrive,sony,xbox,nvidia,ubisoft,nintendo,blizzard,roblox,modrinth": *dns_proxy
+    "rules-set:as-curator@ru,as-stormwall@ru,as-ddosguard,as-service_pipe,as-edgecente,as-selectel,as-vk,as2-vk,as-yandex,as2-yandex,as-yandex_cloud,as-wildberries,teamspeak,ai-ru,geosite-ru,geoip-ru,tld-ru,bank-ru,bet-ru,media-ru,ecommerce-ru,entertainment-ru,vk,yandex,dzen,rutube,games-direct,faceit,torrent-trackers,torrent-clients": *dns_ru
 
 #proxy-providers:
 
@@ -177,13 +177,14 @@ rule-providers:
   as-curator@ru: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS197068.mrs}
   as-stormwall@ru: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS43298.mrs}
   as-ddosguard: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS57724.mrs}
-  as-servicepipe: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS201706.mrs}
+  as-service_pipe: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS201706.mrs}
   as-edgecente: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS210756.mrs}
   as-selectel: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS49505.mrs}
   as-vk: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS47541.mrs}
   as2-vk: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS47764.mrs}
   as-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS13238.mrs}
   as2-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS44534.mrs}
+  as-yandex_cloud: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS200350.mrs}
   as-wildberries: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS57073.mrs}
 
 # DOH & CDN
@@ -199,7 +200,6 @@ rule-providers:
 
 # Services
   companies: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-companies.mrs}
-  companies-ads: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-companies%40ads.mrs}
   google: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/google.mrs}
   google-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/google.mrs}
   microsoft: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/microsoft.mrs}
@@ -304,6 +304,8 @@ rule-providers:
   oisd_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/small.mrs}
   oisd_nsfw_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw_small.mrs}
   oisd_nsfw_big: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw.mrs}
+  companies-ads: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-companies%40ads.mrs}
+  yandex-ads: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/yandex%40ads.mrs}
 
 # Quic
   quic:
@@ -321,6 +323,8 @@ rules:
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # Add
+  - RULE-SET,yandex-ads,REJECT
+  - RULE-SET,companies-ads,REJECT
   - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_small),(RULE-SET,oisd_nsfw_big),(RULE-SET,oisd_nsfw_small)),REJECT
   # Russian Domains & IPs
   - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru),(RULE-SET,tld-ru)),DIRECT
@@ -336,8 +340,9 @@ rules:
   - RULE-SET,as-ddosguard,DIRECT
   - RULE-SET,as-curator@ru,DIRECT
   - RULE-SET,as-wildberries,DIRECT
-  - RULE-SET,as-servicepipe,DIRECT
-  - RULE-SET,as-stormwall@ru,⚫️ VPN
+  - RULE-SET,as-service_pipe,DIRECT
+  - RULE-SET,as-stormwall@ru,DIRECT
+  - RULE-SET,as-yandex_cloud,DIRECT
   - OR,((RULE-SET,as-vk),(RULE-SET,as2-vk)),DIRECT
   - OR,((RULE-SET,as-yandex),(RULE-SET,as2-yandex)),DIRECT
   # ASN
@@ -378,6 +383,7 @@ rules:
   - RULE-SET,youtube,⚫ VPN
   - RULE-SET,samsung,⚫ VPN
   - RULE-SET,remnawave,⚫ VPN
+  - RULE-SET,companies,⚫ VPN
   - RULE-SET,primevideo,⚫ VPN
   - OR,((RULE-SET,microsoft),(RULE-SET,azure)),⚫ VPN
   - OR,((RULE-SET,google),(RULE-SET,google-ip)),⚫ VPN
@@ -385,7 +391,6 @@ rules:
   - OR,((RULE-SET,twitter),(RULE-SET,twitter-ip)),⚫ VPN
   - OR,((RULE-SET,telegram),(RULE-SET,telegram-ip)),⚫ VPN
   - OR,((RULE-SET,discord),(RULE-SET,discord-voice)),⚫ VPN
-  - OR,((RULE-SET,companies),(RULE-SET,companies-ads)),⚫ VPN
   - OR,((RULE-SET,apple),(RULE-SET,apple-ip),(RULE-SET,apple-pki),(RULE-SET,itunes)),⚫ VPN
   - OR,((RULE-SET,meta),(RULE-SET,instagram),(RULE-SET,facebook),(RULE-SET,facebook-ip),(RULE-SET,whatsapp)),⚫ VPN
   # AI
