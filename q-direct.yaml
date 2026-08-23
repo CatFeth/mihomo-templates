@@ -319,10 +319,7 @@ rules:
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # Add
-  - RULE-SET,oisd_big,REJECT
-  - RULE-SET,oisd_small,REJECT
-  - RULE-SET,oisd_nsfw_big,REJECT
-  - RULE-SET,oisd_nsfw_small,REJECT
+  - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_small),(RULE-SET,oisd_nsfw_big),(RULE-SET,oisd_nsfw_small)),REJECT
   # Russian Domains & IPs
   - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru),(RULE-SET,tld-ru)),DIRECT
   # Russian Services
