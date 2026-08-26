@@ -357,7 +357,7 @@ rules:
   - RULE-SET,as-hetzner,⚫ VPN
   - RULE-SET,as-telegram,⚫ VPN
   - RULE-SET,as-microsoft,⚫ VPN
-  - RULE-SET,as-stormwall@eu,⚫️ VPN
+  - RULE-SET,as-stormwall@eu,⚫ VPN
   - OR,((RULE-SET,as-meta),(RULE-SET,as-facebook)),⚫ VPN
   - OR,((RULE-SET,as-akamai),(RULE-SET,as2-akamai)),⚫ VPN
   - OR,((RULE-SET,as-twitter),(RULE-SET,as2-twitter)),⚫ VPN
