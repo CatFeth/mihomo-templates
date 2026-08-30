@@ -134,11 +134,11 @@ dns:
   nameserver-policy:
     rule-set:geosite-private:
       - system
-    rule-set:oisd_big,oisd_small,oisd_nsfw_big,oisd_nsfw_small: 
+    rule-set:oisd_big,oisd_nsfw_big: 
       - rcode://success
     "*.lan,*.local": [192.168.1.1, system]
-    "rule-set:cdn,doh,cloudfront,amazon,companies,win-spy,remnawave,telegram,tiktok,twitch,reddit,netflix,twitter,discord,notion,ai,ai-chat,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
-    "rule-set:geosite-ru,teamspeak,ai-ru,steam,rockstar,epicgames,gog,riot,games-direct": *dns_ru
+    "rule-set:cdn,doh,companies,win-spy,remnawave,telegram,tiktok,twitch,reddit,netflix,discord,notion,ai,ai-chat,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
+    "rule-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
 
 proxy-groups:
   - name: ⚫ VPN
@@ -152,6 +152,9 @@ proxy-groups:
     hidden: true
     url: https://www.gstatic.com/generate_204
     interval: 300
+ # Settings only for Remnawave
+ #   remnawave:
+ #      shuffle-proxies-order: true 
 # LEAVE THIS LINE!
 
 rule-providers:
@@ -164,8 +167,6 @@ rule-providers:
 
 # Add
   oisd_big : {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/big.mrs}
-  oisd_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/small.mrs}
-  oisd_nsfw_small: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw_small.mrs}
   oisd_nsfw_big: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw.mrs}
 
 # Torrent
@@ -219,9 +220,7 @@ rule-providers:
   twitter-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/twitter.mrs}
   discord: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/discord.mrs}
   discord-voice: {<<: *rp_ipcidr, url: https://cdn.jsdelivr.net/gh/legiz-ru/mihomo-rule-sets@main/other/discord-voice-ip-list.mrs}
-  teamspeak: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/teamspeak.mrs}
   notion: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/notion.mrs}
-  porn: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-porn.mrs}
   remnawave: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/remnawave.mrs}
   win-spy: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/win-spy.mrs}
 
@@ -283,16 +282,16 @@ rules:
   # Private
   - RULE-SET,geosite-private,DIRECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
-  # QUIC aka Huinya ebannaya forever
+  # QUIC aka Huinya ebannaya
   - RULE-SET,quic,REJECT-DROP
   # Add
   - RULE-SET,win-spy,REJECT
-  - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_small),(RULE-SET,oisd_nsfw_big),(RULE-SET,oisd_nsfw_small)),REJECT
+  - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_nsfw_big)),REJECT
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # DOH & CDN
-  - RULE-SET,cloudfront,⚫ VPN
   - RULE-SET,fastly-ip,⚫ VPN
+  - RULE-SET,cloudfront,⚫ VPN
   - RULE-SET,cloudflare-ip,⚫ VPN
   - OR,((RULE-SET,doh),(RULE-SET,cdn)),⚫ VPN
   # ASN CDN
@@ -313,9 +312,8 @@ rules:
   - RULE-SET,as-selectel,DIRECT
   - RULE-SET,as-edgecente,DIRECT
   # Services
-  - RULE-SET,teamspeak,DIRECT
+  - PROCESS-NAME-REGEX,.*teamspeak.*,DIRECT
   - DOMAIN-SUFFIX,deepl.com,⚫ VPN
-  - RULE-SET,porn,⚫ VPN
   - RULE-SET,notion,⚫ VPN
   - RULE-SET,twitch,⚫ VPN
   - RULE-SET,reddit,⚫ VPN
