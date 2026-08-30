@@ -1,7 +1,5 @@
 remnawave:
   includeHiddenHosts: false
-mixed-port: 7890
-
 x-anchors:
   reserved_ips: &reserved_ips
     - 0.0.0.0/8
@@ -75,8 +73,8 @@ x-anchors:
     behavior: ipcidr
     format: mrs
 
+mixed-port: 7890
 tcp-concurrent: true
-enable-process: true
 find-process-mode: strict
 mode: rule
 log-level: error
@@ -138,9 +136,9 @@ dns:
       - system
     rule-set:oisd_big,oisd_small,oisd_nsfw_big,oisd_nsfw_small: 
       - rcode://success
-  "*.lan,*.local": [192.168.1.1, system]
-  "rules-set:cdn,doh,cloudfront,cloudflare,cloudflare-ip,amazon,akamai,fastly,fastly-ip,,as-gcore,as-akamai,as2-akamai,as-stormwall@eu,companies,google-ip,win-spy,remnawave,apple-ip,telegram,telegram-ip,tiktok,twitch,reddit,netflix,netflix-ip,facebook-ip,twitter,twitter-ip,discord,discord-voice,notion,porn,as-hetzner,as-ovh,as-amazon,as-oracle,as-digitalocean,as-github,as-tiktok,as-telegram,as-twitter,as2-twitter,ai,ai-ip,ai-chat,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,wise,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
-  "rules-set:torrent-trackers,torrent-clients,as-curator@ru,as-stormwall@ru,as-ddosguard,geosite-ru,geoip-ru,bank-ru,bet-ru,media-ru,ecommerce-ru,entertainment-ru,as-edgecente,as-selectel,as-vk,as2-vk,as-yandex,as2-yandex,as-wildberries,teamspeak,ai-ru,steam,rockstar,epicgames,gog,riot,games-direct": *dns_ru
+    "*.lan,*.local": [192.168.1.1, system]
+    "rule-set:cdn,doh,cloudfront,amazon,companies,win-spy,remnawave,telegram,tiktok,twitch,reddit,netflix,twitter,discord,notion,ai,ai-chat,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
+    "rule-set:geosite-ru,teamspeak,ai-ru,steam,rockstar,epicgames,gog,riot,games-direct": *dns_ru
 
 proxy-groups:
   - name: ⚫ VPN
@@ -177,11 +175,8 @@ rule-providers:
 # DOH & CDN
   cdn: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-cdn-!cn.mrs}
   doh: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-doh.mrs}
-  cloudflare: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cloudflare.mrs}
   cloudflare-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cloudflare.mrs}
   cloudfront: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cloudfront.mrs}
-  akamai: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/akamai.mrs}
-  fastly: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/fastly.mrs}
   fastly-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/fastly.mrs}
 
 # ASN CDN
@@ -196,13 +191,6 @@ rule-providers:
 # Russian Domains & IPs
   geoip-ru: {<<: *rp_ipcidr, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geoip/ru.mrs}
   geosite-ru: {<<: *rp_domain, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/category-ru.mrs}
-
-# Russian Services
-  bank-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-bank-ru.mrs}
-  bet-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-betting-ru.mrs}
-  media-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-media-ru.mrs}
-  ecommerce-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ecommerce-ru.mrs}
-  entertainment-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-entertainment-ru.mrs}
 
 # ASN RU Hostings
   as-edgecente: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS210756.mrs}
@@ -270,7 +258,6 @@ rule-providers:
 
 # Games
   games-direct: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-games.mrs}
-  faceit: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/faceit.mrs}
   roblox: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/roblox.mrs}
   modrinth: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/modrinth.mrs}
 
@@ -299,15 +286,15 @@ rules:
   # QUIC aka Huinya ebannaya forever
   - RULE-SET,quic,REJECT-DROP
   # Add
+  - RULE-SET,win-spy,REJECT
   - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_small),(RULE-SET,oisd_nsfw_big),(RULE-SET,oisd_nsfw_small)),REJECT
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # DOH & CDN
-  - RULE-SET,akamai,⚫ VPN
   - RULE-SET,cloudfront,⚫ VPN
+  - RULE-SET,fastly-ip,⚫ VPN
+  - RULE-SET,cloudflare-ip,⚫ VPN
   - OR,((RULE-SET,doh),(RULE-SET,cdn)),⚫ VPN
-  - OR,((RULE-SET,fastly),(RULE-SET,fastly-ip)),⚫ VPN
-  - OR,((RULE-SET,cloudflare),(RULE-SET,cloudflare-ip)),⚫ VPN
   # ASN CDN
   - RULE-SET,as-ddosguard,DIRECT
   - RULE-SET,as-curator@ru,DIRECT
@@ -317,10 +304,6 @@ rules:
   - OR,((RULE-SET,as-akamai),(RULE-SET,as2-akamai)),⚫ VPN
   # Russian Domains & IPs
   - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru)),DIRECT
-  # Russian Services
-  - RULE-SET,bank-ru,DIRECT
-  - OR,((RULE-SET,ecommerce-ru),(RULE-SET,media-ru)),DIRECT
-  - OR,((RULE-SET,entertainment-ru),(RULE-SET,bet-ru)),DIRECT
   # ASN RU Services
   - RULE-SET,as-wildberries,DIRECT
   - RULE-SET,as-yandex_cloud,DIRECT
@@ -330,7 +313,6 @@ rules:
   - RULE-SET,as-selectel,DIRECT
   - RULE-SET,as-edgecente,DIRECT
   # Services
-  - RULE-SET,win-spy,REJECT
   - RULE-SET,teamspeak,DIRECT
   - DOMAIN-SUFFIX,deepl.com,⚫ VPN
   - RULE-SET,porn,⚫ VPN
