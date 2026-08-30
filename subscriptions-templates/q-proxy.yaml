@@ -261,7 +261,7 @@ rules:
   # Private
   - RULE-SET,geosite-private,DIRECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
-  # QUIC aka Hyinya ebannaya
+  # QUIC aka Hyinya ebannaya forever
   - RULE-SET,quic,REJECT-DROP
   # Add
   - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_small),(RULE-SET,oisd_nsfw_big),(RULE-SET,oisd_nsfw_small)),REJECT
