@@ -134,9 +134,8 @@ dns:
   nameserver-policy:
     rule-set:geosite-private:
       - system
-    rule-set:oisd_big,oisd_nsfw_big: 
+    rule-set:oisd_big: 
       - rcode://success
-    "*.lan,*.local": [192.168.1.1, system]
     "rule-set:cdn,doh,companies,win-spy,remnawave,telegram,tiktok,twitch,reddit,netflix,discord,notion,ai,ai-chat,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
     "rule-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
 
@@ -152,9 +151,8 @@ proxy-groups:
     hidden: true
     url: https://www.gstatic.com/generate_204
     interval: 300
- # Settings only for Remnawave
- #   remnawave:
- #      shuffle-proxies-order: true 
+    remnawave:
+        shuffle-proxies-order: true 
 # LEAVE THIS LINE!
 
 rule-providers:
@@ -165,9 +163,8 @@ rule-providers:
 # Quic
   quic: {<<: *quic}
 
-# Add
+# Ads
   oisd_big : {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/big.mrs}
-  oisd_nsfw_big: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw.mrs}
 
 # Torrent
   torrent-trackers: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-trackers.mrs}
@@ -239,8 +236,6 @@ rule-providers:
 
 # AI
   ai: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-!cn.mrs}
-  ai-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/ai.mrs}
-  ai-chat: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-chat-!cn.mrs}
   ai-cn: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs}
   ai-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-ru.mrs}
 
@@ -282,11 +277,11 @@ rules:
   # Private
   - RULE-SET,geosite-private,DIRECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
-  # QUIC aka Huinya ebannaya
+  # QUIC
   - RULE-SET,quic,REJECT-DROP
-  # Add
+  # Ads
   - RULE-SET,win-spy,REJECT
-  - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_nsfw_big)),REJECT
+  - RULE-SET,oisd_big,REJECT
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # DOH & CDN
@@ -335,7 +330,7 @@ rules:
   - OR,((RULE-SET,as-hetzner),(RULE-SET,as-ovh),(RULE-SET,as-amazon),(RULE-SET,as-oracle),(RULE-SET,as-digitalocean)),⚫ VPN
   # AI
   - RULE-SET,ai-ru,DIRECT
-  - OR,((RULE-SET,ai),(RULE-SET,ai-ip),(RULE-SET,ai-cn),(RULE-SET,ai-chat)),⚫ VPN
+  - OR,((RULE-SET,ai),(RULE-SET,ai-cn)),⚫ VPN
   # Games Companies
   - OR,((RULE-SET,steam),(RULE-SET,rockstar),(RULE-SET,epicgames),(RULE-SET,gog),(RULE-SET,riot)),DIRECT
   - OR,((RULE-SET,ubisoft),(RULE-SET,nintendo),(RULE-SET,blizzard)),⚫ VPN
