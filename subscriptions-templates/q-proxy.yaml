@@ -137,7 +137,7 @@ dns:
     rule-set:oisd_big: 
       - rcode://success
     "*.lan,*.local": [192.168.1.1, system]
-    "rule-set:cdn,doh,cloudfront,win-spy,tiktok,twitch,reddit,discord,nintendo,blizzard,ea,ubisoft": *dns_proxy
+    "rule-set:cdn,doh,win-spy,tiktok,twitch,reddit,discord,nintendo,blizzard,ea,ubisoft": *dns_proxy
     "rule-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot,games-direct": *dns_ru
 
 proxy-groups:
