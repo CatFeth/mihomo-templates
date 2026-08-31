@@ -18,7 +18,7 @@ x-anchors:
   
   geoip-private: &private_ip
     type: inline
-    behavior: classical
+    behavior: ipcidr
     payload:
       - 0.0.0.0/8
       - 10.0.0.0/8
@@ -134,7 +134,7 @@ dns:
   nameserver-policy:
     rule-set:geosite-private:
       - system
-    rule-set:oisd_big,oisd_small,oisd_nsfw_big,oisd_nsfw_small: 
+    rule-set:oisd_big: 
       - rcode://success
     "*.lan,*.local": [192.168.1.1, system]
     "rules-set:cdn,doh,cloudfront,win-spy,tiktok,twitch,reddit,discord,nintendo,blizzard,ea,ubisoft": *dns_proxy
@@ -152,9 +152,8 @@ proxy-groups:
     hidden: true
     url: https://www.gstatic.com/generate_204
     interval: 300
- # Settings only for Remnawave
- #   remnawave:
- #      shuffle-proxies-order: true 
+    remnawave:
+        shuffle-proxies-order: true 
 # LEAVE THIS LINE!
 
 rule-providers:
@@ -165,9 +164,8 @@ rule-providers:
 # Quic
   quic: {<<: *quic}
 
-# Add
+# Ads
   oisd_big : {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/big.mrs}
-  oisd_nsfw_big: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/nsfw.mrs}
 
 # Torrent
   torrent-trackers: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-trackers.mrs}
@@ -248,11 +246,11 @@ rules:
   # Private
   - RULE-SET,geosite-private,DIRECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
-  # QUIC aka Hyinya ebannaya
+  # QUIC
   - RULE-SET,quic,REJECT-DROP
-  # Add
+  # Ads
   - RULE-SET,win-spy,REJECT
-  - OR,((RULE-SET,oisd_big),(RULE-SET,oisd_nsfw_big)),REJECT
+  - RULE-SET,oisd_big,REJECT
   # Torrent
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # DOH & CDN
@@ -280,7 +278,6 @@ rules:
   # Services
   - PROCESS-NAME-REGEX,.*teamspeak.*,DIRECT
   - DOMAIN-SUFFIX,deepl.com,⚫ VPN
-  - RULE-SET,porn,⚫ VPN
   - RULE-SET,notion,⚫ VPN
   - RULE-SET,twitch,⚫ VPN
   - RULE-SET,reddit,⚫ VPN
