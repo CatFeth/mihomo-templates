@@ -137,8 +137,8 @@ dns:
     rule-set:oisd_big: 
       - rcode://success
     "*.lan,*.local": [192.168.1.1, system]
-    "rules-set:cdn,doh,cloudfront,win-spy,tiktok,twitch,reddit,discord,nintendo,blizzard,ea,ubisoft": *dns_proxy
-    "rules-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot,games-direct": *dns_ru
+    "rule-set:cdn,doh,cloudfront,win-spy,tiktok,twitch,reddit,discord,nintendo,blizzard,ea,ubisoft": *dns_proxy
+    "rule-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot,games-direct": *dns_ru
 
 proxy-groups:
   - name: ⚫ VPN
@@ -246,7 +246,7 @@ rules:
   # Private
   - RULE-SET,geosite-private,DIRECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
-  # QUIC
+  # QUIC aka Huinya ebannaya
   - RULE-SET,quic,REJECT-DROP
   # Ads
   - RULE-SET,win-spy,REJECT
