@@ -198,9 +198,7 @@ rule-providers:
 # ASN RU Services
   as-vk: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS47541.mrs}
   as2-vk: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS47764.mrs}
-  as-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS13238.mrs}
-  as2-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS44534.mrs}
-  as-yandex_cloud: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS200350.mrs}
+  as-yandex: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/CatFeth/mihomo-templates/refs/heads/main/asn/yandex.mrs}
   as-wildberries: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS57073.mrs}
 
 # Services
@@ -268,10 +266,9 @@ rules:
   # Russian Domains & IPs
   - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru)),DIRECT
   # ASN RU Services
+  - RULE-SET,as-yandex,DIRECT
   - RULE-SET,as-wildberries,DIRECT
-  - RULE-SET,as-yandex_cloud,DIRECT
   - OR,((RULE-SET,as-vk),(RULE-SET,as2-vk)),DIRECT
-  - OR,((RULE-SET,as-yandex),(RULE-SET,as2-yandex)),DIRECT
   # ASN RU Hostings
   - RULE-SET,as-selectel,DIRECT
   - RULE-SET,as-edgecente,DIRECT
