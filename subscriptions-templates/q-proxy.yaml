@@ -136,7 +136,7 @@ dns:
       - system
     rule-set:oisd_big: 
       - rcode://success
-    "rule-set:cdn,doh,companies,win-spy,telegram,tiktok,twitch,reddit,netflix,discord": *dns_proxy
+    "rule-set:cdn,doh,companies,win-spy,telegram,tiktok,reddit,netflix,discord": *dns_proxy
     "rule-set:geosite-ru,geosite-ru-2,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
 
 proxy-groups:
