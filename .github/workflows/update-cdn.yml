@@ -1,0 +1,85 @@
+name: Update CDN ASN rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  update-cdn:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
+      SRC_BASE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/asn
+      LIST_FILE: asn/cdn.list
+      MRS_FILE: asn/cdn.mrs
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Build cdn.list from ASN sources
+        run: |
+          set -uo pipefail
+
+          declare -A GROUPS
+          GROUPS[Cloudflare]="13335 209242 14789 202623 395747 203898 139242 394536 400095 132892 402542"
+          GROUPS[Amazon]="16509 14618 55960 8987 7224 135629 801 274698 264167 401395 36263 62785 21664"
+          GROUPS[Akamai]="63949 55836 9002 20940 32787 3303 6762 200005 12222 24319 35994 34164 36183 16625 21342 31108 26008 17204 49846 213120 33905 393560"
+          GROUPS[Datacamp]="60068 212238 211612"
+          GROUPS[Gcore]="199524 202422"
+          ORDER="Cloudflare Amazon Akamai Datacamp Gcore"
+
+          mkdir -p "$(dirname "$LIST_FILE")"
+          : > "$LIST_FILE"
+
+          for name in $ORDER; do
+            echo "# $name" >> "$LIST_FILE"
+            echo >> "$LIST_FILE"
+            for asn in ${GROUPS[$name]}; do
+              url="$SRC_BASE/AS${asn}.list"
+              echo "-> AS${asn} ($name)"
+              if ! curl $CURL_OPTS "$url" >> "$LIST_FILE"; then
+                echo "::warning::AS${asn} ($name) недоступен, пропускаю"
+              fi
+              echo >> "$LIST_FILE"
+            done
+          done
+
+          echo "Итого строк:"
+          wc -l "$LIST_FILE"
+
+      - name: Install mihomo
+        run: |
+          set -euo pipefail
+          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
+            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          echo "mihomo version: $M_VER"
+          curl $CURL_OPTS -o mihomo.gz \
+            "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
+          gunzip -f mihomo.gz
+          chmod +x mihomo
+          sudo mv mihomo /usr/local/bin/mihomo
+          mihomo -v
+
+      - name: Convert cdn.list to cdn.mrs
+        run: |
+          set -euo pipefail
+          mihomo convert-ruleset ipcidr text "$LIST_FILE" "$MRS_FILE"
+          ls -la "$MRS_FILE"
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "CDN ASN updater"
+          git config user.email "actions@github.com"
+          git add "$LIST_FILE" "$MRS_FILE"
+          git commit -m "Update CDN ASN rules ($(date -u +%Y-%m-%d))" || { echo "Изменений нет"; exit 0; }
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${GITHUB_REF_NAME}"
