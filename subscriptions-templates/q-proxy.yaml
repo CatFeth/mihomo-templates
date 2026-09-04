@@ -137,7 +137,7 @@ dns:
     rule-set:oisd_big: 
       - rcode://success
     "rule-set:cdn,doh,companies,win-spy,telegram,tiktok,twitch,reddit,netflix,discord": *dns_proxy
-    "rule-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
+    "rule-set:geosite-ru,geosite-ru-2,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
 
 proxy-groups:
   - name: ⚫ VPN
