@@ -165,6 +165,7 @@ rule-providers:
 
 # Ads
   oisd_big : {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/oisd/big.mrs}
+  win-spy: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/win-spy.mrs}
 
 # Torrent
   torrent-trackers: {<<: *rp_domain, url: https://github.com/legiz-ru/mihomo-rule-sets/raw/main/other/torrent-trackers.mrs}
@@ -173,6 +174,8 @@ rule-providers:
 # Russian Domains & IPs
   geoip-ru: {<<: *rp_ipcidr, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geoip/ru.mrs}
   geosite-ru: {<<: *rp_domain, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/category-ru.mrs}
+  geosite-ru-2: {<<: *rp_domain, url: https://raw.githubusercontent.com/Davoyan/mihomo-rule-sets/refs/heads/main/rules/category-ru.mrs}
+  geoip-ru-2: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/Davoyan/mihomo-rule-sets/refs/heads/main/ip-for-ru/lists/ips-for-ru.mrs}
 
 # ASN | RU
   # CDN
@@ -199,20 +202,11 @@ rule-providers:
 
 # Services
   companies: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-companies.mrs}
-  google-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/google.mrs}
-  apple-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo-lite/geoip/apple.mrs}
   telegram: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/telegram.mrs}
   telegram-ip: {<<: *rp_ipcidr, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geoip/telegram.mrs}
   tiktok: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tiktok.mrs}
-  twitch: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/twitch.mrs}
-  reddit: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/reddit.mrs}
-  netflix: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/netflix.mrs}
-  netflix-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/netflix.mrs}
-  facebook-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/facebook.mrs}
-  twitter-ip: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/twitter.mrs}
   discord: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/discord.mrs}
   discord-voice: {<<: *rp_ipcidr, url: https://cdn.jsdelivr.net/gh/legiz-ru/mihomo-rule-sets@main/other/discord-voice-ip-list.mrs}
-  win-spy: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/win-spy.mrs}
 
 # AI
   ai-ru: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-ru.mrs}
@@ -241,6 +235,7 @@ rules:
   - OR,((RULE-SET,torrent-clients),(RULE-SET,torrent-trackers)),DIRECT
   # Russian Domains & IPs
   - OR,((RULE-SET,geosite-ru),(RULE-SET,geoip-ru)),DIRECT
+  - OR,((RULE-SET,geosite-ru-2),(RULE-SET,geoip-ru-2)),DIRECT
   # ASN | RU
     # CDN
   - RULE-SET,as-ddosguard,DIRECT
@@ -251,25 +246,14 @@ rules:
   - RULE-SET,as-yandex,DIRECT
   - RULE-SET,as-wildberries,DIRECT
   # CDN & DOH
-  - RULE-SET,fastly-ip,⚫ VPN
-  - RULE-SET,cloudfront,⚫ VPN
-  - RULE-SET,cloudflare-ip,⚫ VPN
   - OR,((RULE-SET,doh),(RULE-SET,cdn)),⚫ VPN
   # ASN | EU
     # CDN
   - RULE-SET,as-cdn,⚫ VPN
-  - RULE-SET,as-stormwall@eu,⚫ VPN
   # Services
     # RULE-SET
-  - RULE-SET,twitch,⚫ VPN
-  - RULE-SET,reddit,⚫ VPN
   - RULE-SET,tiktok,⚫ VPN
-  - RULE-SET,apple-ip,⚫ VPN
-  - RULE-SET,google-ip,⚫ VPN
   - RULE-SET,companies,⚫ VPN
-  - RULE-SET,twitter-ip,⚫ VPN
-  - RULE-SET,facebook-ip,⚫ VPN
-  - OR,((RULE-SET,netflix),(RULE-SET,netflix-ip)),⚫ VPN
   - OR,((RULE-SET,telegram),(RULE-SET,telegram-ip)),⚫ VPN
   - OR,((RULE-SET,discord),(RULE-SET,discord-voice)),⚫ VPN
   # AI
