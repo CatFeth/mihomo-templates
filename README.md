@@ -6,7 +6,7 @@
 ⚫ All trafic -> Direct
 ⚫ Routing for Russian's Sites and IP's, ASN's and Apps
 ⚫ Routing for many popular Sites, IP's, ASN's and Apps
-⚫ Reject QUIC, windows spy and oisd (a lot of ads domains collection) # Thank you, <b>[Legiz](https://github.com/legiz-ru)<b>
+⚫ Reject QUIC, windows spy and oisd (a lot of ads domains collection) Thank you, <b>[Legiz](https://github.com/legiz-ru)<b>
 
 ---
 ## Template *Quantum Proxy* (Alternative version Q-Direct, less rules)
