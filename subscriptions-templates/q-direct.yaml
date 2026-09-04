@@ -136,7 +136,7 @@ dns:
       - system
     rule-set:oisd_big: 
       - rcode://success
-    "rule-set:cdn,doh,companies,win-spy,remnawave,telegram,tiktok,twitch,reddit,netflix,discord,notion,ai,ai-chat,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
+    "rule-set:cdn,doh,companies,win-spy,remnawave,telegram,tiktok,twitch,reddit,netflix,discord,notion,ai,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,mega,dropbox,terabox,onedrive": *dns_proxy
     "rule-set:geosite-ru,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
 
 proxy-groups:
