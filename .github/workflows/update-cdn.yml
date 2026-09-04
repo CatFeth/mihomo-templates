@@ -22,16 +22,17 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build cdn.list from ASN sources
+      - name: Generate cdn.list
         run: |
           set -uo pipefail
 
-          declare -A GROUPS
-          GROUPS[Cloudflare]="13335 209242 14789 202623 395747 203898 139242 394536 400095 132892 402542"
-          GROUPS[Amazon]="16509 14618 55960 8987 7224 135629 801 274698 264167 401395 36263 62785 21664"
-          GROUPS[Akamai]="63949 55836 9002 20940 32787 3303 6762 200005 12222 24319 35994 34164 36183 16625 21342 31108 26008 17204 49846 213120 33905 393560"
-          GROUPS[Datacamp]="60068 212238 211612"
-          GROUPS[Gcore]="199524 202422"
+          declare -A CDN_GROUPS
+          CDN_GROUPS[Cloudflare]="13335 209242 14789 202623 395747 203898 139242 394536 400095 132892 402542"
+          CDN_GROUPS[Amazon]="16509 14618 55960 8987 7224 135629 801 274698 264167 401395 36263 62785 21664"
+          CDN_GROUPS[Akamai]="63949 55836 9002 20940 32787 3303 6762 200005 12222 24319 35994 34164 36183 16625 21342 31108 26008 17204 49846 213120 33905 393560"
+          CDN_GROUPS[Datacamp]="60068 212238 211612"
+          CDN_GROUPS[Gcore]="199524 202422"
+
           ORDER="Cloudflare Amazon Akamai Datacamp Gcore"
 
           mkdir -p "$(dirname "$LIST_FILE")"
@@ -40,7 +41,7 @@ jobs:
           for name in $ORDER; do
             echo "# $name" >> "$LIST_FILE"
             echo >> "$LIST_FILE"
-            for asn in ${GROUPS[$name]}; do
+            for asn in ${CDN_GROUPS[$name]}; do
               url="$SRC_BASE/AS${asn}.list"
               echo "-> AS${asn} ($name)"
               if ! curl $CURL_OPTS "$url" >> "$LIST_FILE"; then
