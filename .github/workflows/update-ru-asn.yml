@@ -1,0 +1,95 @@
+name: Update Yandex and VK ASN rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 3 * * *'
+
+jobs:
+  update-ru-asn:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
+      SRC_BASE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/asn
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Generate yandex.list
+        run: |
+          set -uo pipefail
+          LIST_FILE="asn/yandex.list"
+          mkdir -p "$(dirname "$LIST_FILE")"
+          : > "$LIST_FILE"
+
+          YANDEX_ASNS="13238 200350 208398 44534 202611 207207 215013 210656 208795 208722 212066"
+
+          for asn in $YANDEX_ASNS; do
+            echo "-> AS${asn} (Yandex)"
+            echo "# ASN ${asn}" >> "$LIST_FILE"
+            if ! curl $CURL_OPTS "$SRC_BASE/AS${asn}.list" >> "$LIST_FILE"; then
+              echo "::warning::AS${asn} недоступен, пропускаю"
+            fi
+            echo >> "$LIST_FILE"
+          done
+
+          echo "Итого строк в yandex.list:"
+          wc -l "$LIST_FILE"
+
+      - name: Generate vk.list
+        run: |
+          set -uo pipefail
+          LIST_FILE="asn/vk.list"
+          mkdir -p "$(dirname "$LIST_FILE")"
+          : > "$LIST_FILE"
+
+          VK_ASNS="47541 47764 57973 61178 60476 205830"
+
+          for asn in $VK_ASNS; do
+            echo "-> AS${asn} (VK)"
+            echo "# ASN ${asn}" >> "$LIST_FILE"
+            if ! curl $CURL_OPTS "$SRC_BASE/AS${asn}.list" >> "$LIST_FILE"; then
+              echo "::warning::AS${asn} недоступен, пропускаю"
+            fi
+            echo >> "$LIST_FILE"
+          done
+
+          echo "Итого строк в vk.list:"
+          wc -l "$LIST_FILE"
+
+      - name: Install mihomo
+        run: |
+          set -euo pipefail
+          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
+            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          echo "mihomo version: $M_VER"
+          curl $CURL_OPTS -o mihomo.gz \
+            "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
+          gunzip -f mihomo.gz
+          chmod +x mihomo
+          sudo mv mihomo /usr/local/bin/mihomo
+          mihomo -v
+
+      - name: Convert lists to .mrs
+        run: |
+          set -euo pipefail
+          mihomo convert-ruleset ipcidr text "asn/yandex.list" "asn/yandex.mrs"
+          mihomo convert-ruleset ipcidr text "asn/vk.list" "asn/vk.mrs"
+          ls -la asn/
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "actions-user"
+          git config user.email "actions@github.com"
+          git add asn/yandex.list asn/yandex.mrs asn/vk.list asn/vk.mrs
+          git commit -m "Update Yandex and VK ASN rules ($(date -u +%Y-%m-%d))" || { echo "Изменений нет"; exit 0; }
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${GITHUB_REF_NAME}"
