@@ -197,7 +197,7 @@ rule-providers:
 
 # ASN | EU
   # CDN
-  as-cdn: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/VPN/mihomo-templates/refs/heads/main/asn/cdn.mrs}
+  as-cdn: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/CatFeth/mihomo-templates/refs/heads/main/asn/cdn.mrs}
   as-stormwall@eu: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS59796.mrs}
   # Services
   as-github: {<<: *rp_ipcidr, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS36459.mrs}
