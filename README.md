@@ -15,6 +15,12 @@
 ⚫ Routing for Russian's Sites and IP's, ASN's and Apps
 
 ---
+## Template *Quantum Direct & Quantum Proxy for 3X-UI*
+
+These configurations include the default q-direct and q-proxy settings + special values to ensure the Clash configuration works properly in the <b>[3X-UI-Pro](https://github.com/mozaroc/3x-ui-pro)<b>.
+Thank you, <b>[Skaat](https://github.com/skaat-mf)<b> and <b>[Leh](https://github.com/Inrd-sknrd)<b>
+
+---
 ## ASN
 
 ⚫ Rule-set Russian ASN (Yandex & VK for now)
