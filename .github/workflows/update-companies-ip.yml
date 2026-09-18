@@ -1,0 +1,95 @@
+name: Update Companies IP rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  update-companies:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
+      LIST_FILE: geo/geoip/companies-ip.list
+      MRS_FILE: geo/geoip/companies-ip.mrs
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Generate companies-ip.list
+        run: |
+          set -uo pipefail
+
+          mkdir -p "$(dirname "$LIST_FILE")"
+          : > "$LIST_FILE"
+
+          declare -A COMPANIES
+          COMPANIES[Google]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/google.list"
+          COMPANIES[GitHub]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS36459.list"
+          COMPANIES[Telegram]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/telegram.list"
+          COMPANIES[TikTok]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS396986.list"
+          COMPANIES[Twitter]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/twitter.list https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS13414.list https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS63179.list"
+          COMPANIES[Apple]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo-lite/geoip/apple.list"
+          COMPANIES[Netflix]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/netflix.list"
+          COMPANIES[Facebook]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/facebook.list"
+          COMPANIES[DeepL]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS60550.list"
+          COMPANIES[Pinterest]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS53620.list"
+
+          ORDER="Google GitHub Telegram TikTok Twitter Apple Netflix Facebook DeepL Pinterest"
+
+          for name in $ORDER; do
+            echo "-> Processing $name"
+            echo "# $name" >> "$LIST_FILE"
+            : > company_tmp.txt
+
+            for url in ${COMPANIES[$name]}; do
+              echo "   Downloading: $url"
+              if ! curl $CURL_OPTS "$url" >> company_tmp.txt; then
+                echo "::warning::Не удалось скачать $url"
+              fi
+            done
+
+            # Очищаем от пустых строк, убираем дубликаты и дописываем в итоговый список
+            grep -v '^[[:space:]]*$' company_tmp.txt | sort -u >> "$LIST_FILE"
+            echo >> "$LIST_FILE"
+          done
+
+          rm -f company_tmp.txt
+          echo "Итого строк в $LIST_FILE:"
+          wc -l "$LIST_FILE"
+
+      - name: Install mihomo
+        run: |
+          set -euo pipefail
+          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
+            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          echo "mihomo version: $M_VER"
+          curl $CURL_OPTS -o mihomo.gz \
+            "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
+          gunzip -f mihomo.gz
+          chmod +x mihomo
+          sudo mv mihomo /usr/local/bin/mihomo
+          mihomo -v
+
+      - name: Convert companies-ip.list to companies-ip.mrs
+        run: |
+          set -euo pipefail
+          mihomo convert-ruleset ipcidr text "$LIST_FILE" "$MRS_FILE"
+          ls -lh "$LIST_FILE" "$MRS_FILE"
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "actions-user"
+          git config user.email "actions@github.com"
+          git add "$LIST_FILE" "$MRS_FILE"
+          git commit -m "Update companies-ip rules ($(date -u +%Y-%m-%d))" || { echo "Изменений нет"; exit 0; }
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${GITHUB_REF_NAME}"
