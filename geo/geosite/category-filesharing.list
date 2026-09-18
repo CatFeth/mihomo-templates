@@ -47,3 +47,46 @@ paper-attachments.s3.amazonaws.com
 +.photos.live.com
 +.onedrive.live.com
 +.skydrive.wns.windows.com
+
+# Google Drive
++.drive.google.com
++.docs.google.com
++.drive.usercontent.google.com
++.googledrive.com
+# Box
+.box.com
++.box.net
+.boxcdn.net
++.boxcloud.com
+
+# pCloud
++.pcloud.com
++.pcloud.link
++.pcloud.ch
+
+# MediaFire
++.mediafire.com
++.mfcreative.com
+
+# WeTransfer
++.wetransfer.com
++.wetransfer.net
++.wtrnsfr.com
+
+# 4shared
++.4shared.com
++.4shared-china.com
+
+# Rapidgator
++.rapidgator.net
++.rg.to
+
+# Gofile
++.gofile.io
+
+# 1fichier
++.1fichier.com
+
+# Turbobit
++.turbobit.net
++.hitfile.net
