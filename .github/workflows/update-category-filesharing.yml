@@ -1,0 +1,139 @@
+name: Update Category Filesharing rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 4 * * *'
+
+jobs:
+  update-filesharing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
+      LIST_FILE: geo/geosite/category-filesharing.list
+      MRS_FILE: geo/geosite/category-filesharing.mrs
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Generate category-filesharing.list
+        run: |
+          set -uo pipefail
+
+          mkdir -p "$(dirname "$LIST_FILE")"
+          : > "$LIST_FILE"
+
+          # 1. Загружаем динамические сервисы из MetaCubeX
+          declare -A META_SOURCES
+          META_SOURCES[Dropbox]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/dropbox.list"
+          META_SOURCES[MEGA]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/mega.list"
+          META_SOURCES[Terabox]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/terabox.list"
+          META_SOURCES[Onedrive]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/onedrive.list"
+
+          ORDER_META="Dropbox MEGA Terabox Onedrive"
+
+          for name in $ORDER_META; do
+            echo "-> Downloading $name from MetaCubeX"
+            echo "# $name" >> "$LIST_FILE"
+            : > source_tmp.txt
+
+            for url in ${META_SOURCES[$name]}; do
+              if ! curl $CURL_OPTS "$url" >> source_tmp.txt; then
+                echo "::warning::Не удалось скачать $url"
+              fi
+            done
+
+            grep -v '^[[:space:]]*$' source_tmp.txt | sort -u >> "$LIST_FILE"
+            echo >> "$LIST_FILE"
+          done
+          rm -f source_tmp.txt
+
+          # 2. Дописываем статичные сервисы
+          echo "-> Preserving curated cloud storage & file sharing services"
+
+          cat << 'EOF' >> "$LIST_FILE"
+          # Google Drive
+          +.drive.google.com
+          +.docs.google.com
+          +.drive.usercontent.google.com
+          +.googledrive.com
+
+          # Box
+          +.box.com
+          +.box.net
+          +.boxcdn.net
+          +.boxcloud.com
+
+          # pCloud
+          +.pcloud.com
+          +.pcloud.link
+          +.pcloud.ch
+
+          # MediaFire
+          +.mediafire.com
+          +.mfcreative.com
+
+          # WeTransfer
+          +.wetransfer.com
+          +.wetransfer.net
+          +.wtrnsfr.com
+
+          # 4shared
+          +.4shared.com
+          +.4shared-china.com
+
+          # Rapidgator
+          +.rapidgator.net
+          +.rg.to
+
+          # Gofile
+          +.gofile.io
+
+          # 1fichier
+          +.1fichier.com
+
+          # Turbobit
+          +.turbobit.net
+          +.hitfile.net
+          EOF
+
+          sed -i 's/^[ \t]*//' "$LIST_FILE"
+
+          echo "Итого строк в $LIST_FILE:"
+          wc -l "$LIST_FILE"
+
+      - name: Install mihomo
+        run: |
+          set -euo pipefail
+          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
+            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          echo "mihomo version: $M_VER"
+          curl $CURL_OPTS -o mihomo.gz \
+            "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
+          gunzip -f mihomo.gz
+          chmod +x mihomo
+          sudo mv mihomo /usr/local/bin/mihomo
+          mihomo -v
+
+      - name: Convert category-filesharing.list to mrs
+        run: |
+          set -euo pipefail
+          mihomo convert-ruleset domain text "$LIST_FILE" "$MRS_FILE"
+          ls -lh "$LIST_FILE" "$MRS_FILE"
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "actions-user"
+          git config user.email "actions@github.com"
+          git add "$LIST_FILE" "$MRS_FILE"
+          git commit -m "Update category-filesharing rules ($(date -u +%Y-%m-%d))" || { echo "Изменений нет"; exit 0; }
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${GITHUB_REF_NAME}"
