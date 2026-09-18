@@ -1,5 +1,4 @@
 # Dropbox
-paper-attachments.s3.amazonaws.com
 +.db.tt
 +.dropbox-dns.com
 +.dropbox.com
@@ -15,11 +14,12 @@ paper-attachments.s3.amazonaws.com
 +.dropboxstatic.com
 +.dropboxusercontent.com
 +.getdropbox.com
+paper-attachments.s3.amazonaws.com
 
 # MEGA
++.mega.co.nz
 +.mega.io
 +.mega.nz
-+.mega.co.nz
 
 # Terabox
 +.1024terabox.com
@@ -31,32 +31,33 @@ paper-attachments.s3.amazonaws.com
 +.teraboxcdn.com
 
 # Onedrive
-+.onedrive
-+.onedriveupdater
-+.sharepointonline.com
-+.microsoftpersonalcontent.com
-+.onedrive.com
-+.sharepoint.cn
-+.livefilestore.com
-+.sharepoint.com
 +.1drv.com
-+.storage.msn.com
++.livefilestore.com
++.microsoftpersonalcontent.com
++.oneclient.sfx.ms
++.onedrive
++.onedrive.com
++.onedrive.live.com
++.onedriveupdater
++.photos.live.com
++.sharepoint.cn
++.sharepoint.com
++.sharepointonline.com
++.skydrive.wns.windows.com
 +.spoprod-a.akamaihd.net
 +.storage.live.com
-+.oneclient.sfx.ms
-+.photos.live.com
-+.onedrive.live.com
-+.skydrive.wns.windows.com
++.storage.msn.com
 
 # Google Drive
 +.drive.google.com
 +.docs.google.com
 +.drive.usercontent.google.com
 +.googledrive.com
+
 # Box
-.box.com
++.box.com
 +.box.net
-.boxcdn.net
++.boxcdn.net
 +.boxcloud.com
 
 # pCloud
