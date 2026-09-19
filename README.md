@@ -46,5 +46,5 @@ https://${DOMAIN}/${SUB_PATH}/${SUB_ID} with the URL of your actual 3X-UI-Pro su
 
 ---
 ## Thanks 
-<b>[Legiz](https://github.com/legiz-ru)<b> and <b>[Davoyan](https://github.com/Davoyan)<b>
+<b>[Legiz](https://github.com/legiz-ru)<b> and <b>[Davoyan](https://github.com/Davoyan)<b>,
 <b>[Skaat](https://github.com/skaat-mf)<b> and <b>[Leh](https://github.com/Inrd-sknrd)<b>
