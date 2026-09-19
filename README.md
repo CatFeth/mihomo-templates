@@ -6,7 +6,7 @@
 ⚫ All trafic -> Direct
 ⚫ Routing for Russian's Sites and IP's, ASN's and Apps
 ⚫ Routing for many popular Sites, IP's, ASN's and Apps
-⚫ Reject QUIC, windows spy and oisd (a lot of ads domains collection) Thank you, <b>[Legiz](https://github.com/legiz-ru)<b> and <b>[Davoyan](https://github.com/Davoyan)<b>
+⚫ Reject QUIC, windows spy and oisd (a lot of ads domains collection) 
 
 ---
 ## Template *Quantum Proxy* (Alternative version Q-Direct, less rules)
@@ -18,17 +18,16 @@
 ## Template *Quantum Direct & Quantum Proxy for 3X-UI*
 
 These configurations include the default q-direct and q-proxy settings + special values to ensure the Clash configuration works properly in the <b>[3X-UI-Pro](https://github.com/mozaroc/3x-ui-pro)<b>.
-Thank you, <b>[Skaat](https://github.com/skaat-mf)<b> and <b>[Leh](https://github.com/Inrd-sknrd)<b>
 
-Guide:
+### Guide:
 
-RU:
+#### RU:
 Для замены шаблона mihomo(clash) в инсталляции 3X-UI-Pro, необходимо:
 1. Скачать файл q-direct-3x.yaml или q-proxy-3x.yaml, найти строку №143 и заменить 
 https://${DOMAIN}/${SUB_PATH}/${SUB_ID} на url вашей реальной подписки из 3X-UI-Pro
 2. На сервере где установлен 3X-UI-Pro, заменить содержимое файла /var/www/subpage/clash.yaml.tpl на новый шаблон из п.1
 
-EN:
+#### EN:
 To replace the mihomo(clash) template in a 3X-UI-Pro installation, you must:
 1. Download the q-direct-3x.yaml or q-proxy-3x.yaml file, locate line 143 and replace 
 https://${DOMAIN}/${SUB_PATH}/${SUB_ID} with the URL of your actual 3X-UI-Pro subscription
@@ -37,5 +36,15 @@ https://${DOMAIN}/${SUB_PATH}/${SUB_ID} with the URL of your actual 3X-UI-Pro su
 ---
 ## ASN
 
-⚫ Rule-set Russian ASN (Yandex & VK for now)
-⚫ Rule-set CDN ASN (Cloudflare, Amazon, Akamai, Datacamp, Gcore for now)
+⚫ Rule-set Russian ASN
+⚫ Rule-set CDN ASN
+
+---
+## Geo
+
+⚫ Rule-set for domains & ip/cidr
+
+---
+## Thanks 
+<b>[Legiz](https://github.com/legiz-ru)<b> and <b>[Davoyan](https://github.com/Davoyan)<b>
+<b>[Skaat](https://github.com/skaat-mf)<b> and <b>[Leh](https://github.com/Inrd-sknrd)<b>
