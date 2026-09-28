@@ -141,7 +141,7 @@ dns:
   nameserver-policy:
     rule-set:geosite-private:
       - system
-    rule-set:oisd_big: 
+    rule-set:oisd_big,win-spy: 
       - rcode://success
     "rule-set:cdn,doh,companies,telegram,tiktok,discord": *dns_proxy
     "rule-set:geosite-ru,geosite-ru-2,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
@@ -159,9 +159,6 @@ proxy-groups:
     interval: 300
     remnawave:
         shuffle-proxies-order: true
-  - name: GLOBAL
-    flclashx-override: true
-    type: select
 
 rule-providers:
 # Private Domains & IPs
