@@ -139,7 +139,7 @@ dns:
   nameserver-policy:
     rule-set:geosite-private:
       - system
-    rule-set:oisd_big: 
+    rule-set:oisd_big,win-spy: 
       - rcode://success
     "rule-set:cdn,doh,companies,remnawave,telegram,tiktok,twitch,reddit,netflix,discord,anime,ai,ai-cn,nintendo,blizzard,ea,ubisoft,roblox,modrinth,paypal,stripe,crypto,spotify,soundcloud,deezer,bandcamp,tidal,file-sharing": *dns_proxy
     "rule-set:geosite-ru,geosite-ru-2,ai-ru,steam,rockstar,epicgames,gog,riot": *dns_ru
