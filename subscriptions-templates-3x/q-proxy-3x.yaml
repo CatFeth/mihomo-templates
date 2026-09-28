@@ -124,8 +124,7 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - rule-set:geosite-private
-    - "+.lan"
-    - "+.local"
+    - rule-set:geosite-fake-ip
     - "+.msftncsi.com"
     - "+.msftconnecttest.com"
   default-nameserver: *dns_ru
@@ -161,6 +160,10 @@ proxy-providers:
       lazy: true
       expected-status: 204
 
+proxies:
+  - name: DNS-OUT
+    type: dns
+
 proxy-groups:
   - name: ⚫ VPN
     type: select
@@ -177,6 +180,7 @@ proxy-groups:
 
 rule-providers:
 # Private Domains & IPs
+  geosite-fake-ip: {<<: *rp_domain, url: https://raw.githubusercontent.com/juewuy/ShellCrash/refs/heads/dev/public/fake_ip_filter.list}
   geosite-private: {<<: *rp_domain, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/private.mrs}
   geoip-private: {<<: *private_ip}
 
@@ -243,6 +247,8 @@ rule-providers:
   roblox: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/roblox.mrs}
 
 rules:
+  # DNS HIJACK
+  - DST-PORT,53,DNS-OUT
   # Private
   - RULE-SET,geosite-private,DIRECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
@@ -273,7 +279,6 @@ rules:
   # Services
     # PROCESS-NAME
   - PROCESS-NAME-WILDCARD,*teamspeak*,DIRECT
-  - PROCESS-NAME-WILDCARD,*termius*,⚫ VPN
   - PROCESS-NAME-WILDCARD,*ayugram*,⚫ VPN
   - PROCESS-NAME-WILDCARD,*youtube*,⚫ VPN
   - PROCESS-NAME-WILDCARD,*telegram*,⚫ VPN
