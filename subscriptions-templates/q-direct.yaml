@@ -111,7 +111,6 @@ tun:
   auto-detect-interface: true
   dns-hijack:
     - any:53
-    - tcp://any:53
   strict-route: true
   route-exclude-address: *reserved_ips
 
@@ -119,7 +118,7 @@ hosts:
   ntc.party: 130.255.77.28
 dns:
   enable: true
-  ipv6: true
+  ipv6: false
   use-hosts: true
   use-system-hosts: true
   enhanced-mode: fake-ip

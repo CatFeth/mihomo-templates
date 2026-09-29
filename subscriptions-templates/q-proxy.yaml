@@ -111,7 +111,6 @@ tun:
   auto-detect-interface: true
   dns-hijack:
     - any:53
-    - tcp://any:53
   strict-route: true
   route-exclude-address: *reserved_ips
 
