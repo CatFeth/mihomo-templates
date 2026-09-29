@@ -125,8 +125,6 @@ dns:
   fake-ip-filter:
     - rule-set:geosite-private
     - rule-set:geosite-fake-ip
-    - "+.msftncsi.com"
-    - "+.msftconnecttest.com"
   default-nameserver: *dns_ru
   nameserver: *dns_proxy
   proxy-server-nameserver: *dns_ru
@@ -178,7 +176,7 @@ proxy-groups:
 
 rule-providers:
 # Private Domains & IPs
-  geosite-fake-ip: {<<: *rp_domain, url: https://raw.githubusercontent.com/juewuy/ShellCrash/refs/heads/dev/public/fake_ip_filter.list}
+  geosite-fake-ip: {<<: *rp_domain, url: https://raw.githubusercontent.com/wwqgtxx/clash-rules/refs/heads/release/fakeip-filter.mrs}
   geosite-private: {<<: *rp_domain, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/private.mrs}
   geoip-private: {<<: *private_ip}
 
