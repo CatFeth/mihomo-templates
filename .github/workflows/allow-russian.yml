@@ -1,0 +1,86 @@
+name: Update Allow Russian rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  update-allow-russian:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
+      LIST_FILE: geo/geosite/allow-russian.list
+      MRS_FILE: geo/geosite/allow-russian.mrs
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Generate allow-russian.list
+        run: |
+          set -uo pipefail
+
+          mkdir -p "$(dirname "$LIST_FILE")"
+          : > "$LIST_FILE"
+
+          declare -A SOURCES
+          SOURCES[Habr]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/habr.list"
+          SOURCES[4PDA]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/4pda.list"
+          SOURCES[Notion]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/notion.list"
+          SOURCES[Flibusta]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/flibusta.list"
+
+          ORDER="Habr 4PDA Notion Flibusta"
+
+          for name in $ORDER; do
+            echo "-> Downloading $name"
+            echo "# $name" >> "$LIST_FILE"
+            : > source_tmp.txt
+
+            for url in ${SOURCES[$name]}; do
+              if ! curl $CURL_OPTS "$url" >> source_tmp.txt; then
+                echo "::warning::Не удалось скачать $url"
+              fi
+            done
+
+            grep -v '^[[:space:]]*$' source_tmp.txt | sort -u >> "$LIST_FILE"
+            echo >> "$LIST_FILE"
+          done
+
+          rm -f source_tmp.txt
+          echo "Итого строк в $LIST_FILE:"
+          wc -l "$LIST_FILE"
+
+      - name: Install mihomo
+        run: |
+          set -euo pipefail
+          M_VER=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/MetaCubeX/mihomo/releases/latest | sed 's|.*/v||')
+          echo "mihomo version: $M_VER"
+          curl $CURL_OPTS -o mihomo.gz \
+            "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
+          gunzip -f mihomo.gz
+          chmod +x mihomo
+          sudo mv mihomo /usr/local/bin/mihomo
+          mihomo -v
+
+      - name: Convert allow-russian.list to mrs
+        run: |
+          set -euo pipefail
+          mihomo convert-ruleset domain text "$LIST_FILE" "$MRS_FILE"
+          ls -lh "$LIST_FILE" "$MRS_FILE"
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "actions-user"
+          git config user.email "actions@github.com"
+          git add "$LIST_FILE" "$MRS_FILE"
+          git commit -m "Update allow-russian rules ($(date -u +%Y-%m-%d))" || { echo "Изменений нет"; exit 0; }
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${GITHUB_REF_NAME}"
