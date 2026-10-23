@@ -117,8 +117,6 @@ tun:
 dns:
   enable: true
   ipv6: false
-  use-hosts: true
-  use-system-hosts: true
   enhanced-mode: fake-ip
   cache-algorithm: arc
   prefer-h3: false
