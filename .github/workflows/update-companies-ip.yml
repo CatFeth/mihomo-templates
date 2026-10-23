@@ -39,8 +39,9 @@ jobs:
           COMPANIES[Facebook]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/facebook.list"
           COMPANIES[DeepL]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS60550.list"
           COMPANIES[Pinterest]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS53620.list"
+          COMPANIES[Proton]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS62371.list https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS199218.list https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS208172.list https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn/AS209103.list"
 
-          ORDER="Google GitHub Telegram TikTok Twitter Apple Netflix Facebook DeepL Pinterest"
+          ORDER="Google GitHub Telegram TikTok Twitter Apple Netflix Facebook DeepL Pinterest Proton"
 
           for name in $ORDER; do
             echo "-> Processing $name"
