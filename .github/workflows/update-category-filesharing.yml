@@ -110,8 +110,7 @@ jobs:
       - name: Install mihomo
         run: |
           set -euo pipefail
-          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
-            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          M_VER=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/MetaCubeX/mihomo/releases/latest | sed 's|.*/v||')
           echo "mihomo version: $M_VER"
           curl $CURL_OPTS -o mihomo.gz \
             "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"

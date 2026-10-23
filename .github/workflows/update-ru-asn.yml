@@ -12,7 +12,7 @@ jobs:
       contents: write
     env:
       CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
-      SRC_BASE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/asn
+      SRC_BASE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn
 
     steps:
       - name: Checkout repo
@@ -31,13 +31,17 @@ jobs:
 
           for asn in $YANDEX_ASNS; do
             echo "-> AS${asn} (Yandex)"
-            echo "# ASN ${asn}" >> "$LIST_FILE"
-            if ! curl $CURL_OPTS "$SRC_BASE/AS${asn}.list" >> "$LIST_FILE"; then
-              echo "::warning::AS${asn} недоступен, пропускаю"
+            if curl $CURL_OPTS "$SRC_BASE/AS${asn}.list" -o asn_tmp.txt && [ -s asn_tmp.txt ]; then
+              echo "# ASN ${asn}" >> "$LIST_FILE"
+              grep -v '^[[:space:]]*$' asn_tmp.txt >> "$LIST_FILE"
+              echo >> "$LIST_FILE"
+            else
+              echo "::warning::AS${asn} недоступен или пуст, пропускаю"
             fi
-            echo >> "$LIST_FILE"
           done
+          rm -f asn_tmp.txt
 
+          grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
           echo "Итого строк в yandex.list:"
           wc -l "$LIST_FILE"
 
@@ -52,21 +56,24 @@ jobs:
 
           for asn in $VK_ASNS; do
             echo "-> AS${asn} (VK)"
-            echo "# ASN ${asn}" >> "$LIST_FILE"
-            if ! curl $CURL_OPTS "$SRC_BASE/AS${asn}.list" >> "$LIST_FILE"; then
-              echo "::warning::AS${asn} недоступен, пропускаю"
+            if curl $CURL_OPTS "$SRC_BASE/AS${asn}.list" -o asn_tmp.txt && [ -s asn_tmp.txt ]; then
+              echo "# ASN ${asn}" >> "$LIST_FILE"
+              grep -v '^[[:space:]]*$' asn_tmp.txt >> "$LIST_FILE"
+              echo >> "$LIST_FILE"
+            else
+              echo "::warning::AS${asn} недоступен или пуст, пропускаю"
             fi
-            echo >> "$LIST_FILE"
           done
+          rm -f asn_tmp.txt
 
+          grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
           echo "Итого строк в vk.list:"
           wc -l "$LIST_FILE"
 
       - name: Install mihomo
         run: |
           set -euo pipefail
-          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
-            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          M_VER=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/MetaCubeX/mihomo/releases/latest | sed 's|.*/v||')
           echo "mihomo version: $M_VER"
           curl $CURL_OPTS -o mihomo.gz \
             "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
@@ -80,7 +87,7 @@ jobs:
           set -euo pipefail
           mihomo convert-ruleset ipcidr text "asn/yandex.list" "asn/yandex.mrs"
           mihomo convert-ruleset ipcidr text "asn/vk.list" "asn/vk.mrs"
-          ls -la asn/
+          ls -lh asn/
 
       - name: Commit and push
         env:

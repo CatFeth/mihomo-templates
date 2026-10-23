@@ -53,6 +53,7 @@ jobs:
               if ! curl $CURL_OPTS "$url" >> company_tmp.txt; then
                 echo "::warning::Не удалось скачать $url"
               fi
+              echo >> company_tmp.txt
             done
 
             # Очищаем от пустых строк, убираем дубликаты и дописываем в итоговый список
@@ -61,14 +62,15 @@ jobs:
           done
 
           rm -f company_tmp.txt
+          grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
+
           echo "Итого строк в $LIST_FILE:"
           wc -l "$LIST_FILE"
 
       - name: Install mihomo
         run: |
           set -euo pipefail
-          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
-            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          M_VER=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/MetaCubeX/mihomo/releases/latest | sed 's|.*/v||')
           echo "mihomo version: $M_VER"
           curl $CURL_OPTS -o mihomo.gz \
             "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"

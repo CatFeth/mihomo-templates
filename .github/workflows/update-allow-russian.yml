@@ -52,6 +52,8 @@ jobs:
           done
 
           rm -f source_tmp.txt
+          grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
+
           echo "Итого строк в $LIST_FILE:"
           wc -l "$LIST_FILE"
 

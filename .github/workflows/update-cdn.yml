@@ -12,7 +12,7 @@ jobs:
       contents: write
     env:
       CURL_OPTS: -fsSL --retry 3 --retry-delay 2 --retry-connrefused
-      SRC_BASE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/asn
+      SRC_BASE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn
       LIST_FILE: asn/cdn.list
       MRS_FILE: asn/cdn.mrs
 
@@ -40,16 +40,23 @@ jobs:
 
           for name in $ORDER; do
             echo "# $name" >> "$LIST_FILE"
-            echo >> "$LIST_FILE"
+            : > cdn_tmp.txt
+
             for asn in ${CDN_GROUPS[$name]}; do
               url="$SRC_BASE/AS${asn}.list"
               echo "-> AS${asn} ($name)"
-              if ! curl $CURL_OPTS "$url" >> "$LIST_FILE"; then
+              if ! curl $CURL_OPTS "$url" >> cdn_tmp.txt; then
                 echo "::warning::AS${asn} ($name) недоступен, пропускаю"
               fi
-              echo >> "$LIST_FILE"
+              echo >> cdn_tmp.txt
             done
+
+            grep -v '^[[:space:]]*$' cdn_tmp.txt | sort -u >> "$LIST_FILE"
+            echo >> "$LIST_FILE"
           done
+
+          rm -f cdn_tmp.txt
+          grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
 
           echo "Итого строк:"
           wc -l "$LIST_FILE"
@@ -57,8 +64,7 @@ jobs:
       - name: Install mihomo
         run: |
           set -euo pipefail
-          M_VER=$(curl $CURL_OPTS https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
-            | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+          M_VER=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/MetaCubeX/mihomo/releases/latest | sed 's|.*/v||')
           echo "mihomo version: $M_VER"
           curl $CURL_OPTS -o mihomo.gz \
             "https://github.com/MetaCubeX/mihomo/releases/download/v${M_VER}/mihomo-linux-amd64-v${M_VER}.gz"
@@ -71,14 +77,14 @@ jobs:
         run: |
           set -euo pipefail
           mihomo convert-ruleset ipcidr text "$LIST_FILE" "$MRS_FILE"
-          ls -la "$MRS_FILE"
+          ls -lh "$LIST_FILE" "$MRS_FILE"
 
       - name: Commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          git config user.name "CDN ASN updater"
+          git config user.name "actions-user"
           git config user.email "actions@github.com"
           git add "$LIST_FILE" "$MRS_FILE"
           git commit -m "Update CDN ASN rules ($(date -u +%Y-%m-%d))" || { echo "Изменений нет"; exit 0; }
