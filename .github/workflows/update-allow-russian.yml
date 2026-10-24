@@ -28,6 +28,7 @@ jobs:
           mkdir -p "$(dirname "$LIST_FILE")"
           : > "$LIST_FILE"
 
+          # 1. Списки из MetaCube
           declare -A SOURCES
           SOURCES[Habr]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/habr.list"
           SOURCES[4PDA]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/4pda.list"
@@ -52,6 +53,17 @@ jobs:
           done
 
           rm -f source_tmp.txt
+
+          # 2. Отдельные домены
+          echo "-> Adding custom static domains"
+
+          cat << 'EOF' >> "$LIST_FILE"
+          # NTC.party
+          +.ntc.party
+          EOF
+
+          sed -i 's/^[ \t]*//' "$LIST_FILE"
+
           grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
 
           echo "Итого строк в $LIST_FILE:"
