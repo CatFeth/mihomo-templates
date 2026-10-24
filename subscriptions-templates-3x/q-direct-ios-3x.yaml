@@ -223,7 +223,6 @@ rule-providers:
   discord-voice: {<<: *rp_ipcidr, url: https://cdn.jsdelivr.net/gh/legiz-ru/mihomo-rule-sets@main/other/discord-voice-ip-list.mrs}
   anime: {<<: *rp_domain, url: https://raw.githubusercontent.com/CatFeth/mihomo-templates/refs/heads/main/geo/geosite/anime.mrs}
   remnawave: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/remnawave.mrs}
-  allow-russian: {<<: *rp_domain, url: https://raw.githubusercontent.com/CatFeth/mihomo-templates/refs/heads/main/geo/geosite/allow-russian.mrs}
 
 # AI
   ai: {<<: *rp_domain, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-!cn.mrs}
@@ -295,7 +294,6 @@ rules:
   - RULE-SET,netflix,⚫ VPN
   - RULE-SET,telegram,⚫ VPN
   - RULE-SET,remnawave,⚫ VPN
-  - RULE-SET,allow-russian,⚫ VPN
   - OR,((RULE-SET,discord),(RULE-SET,discord-voice)),⚫ VPN
   - OR,((RULE-SET,companies),(RULE-SET,companies-ip)),⚫ VPN
   # AI
