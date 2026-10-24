@@ -28,15 +28,13 @@ jobs:
           mkdir -p "$(dirname "$LIST_FILE")"
           : > "$LIST_FILE"
 
-          # 1. Загружаем динамические списки из MetaCubeX
           declare -A SOURCES
-          SOURCES[Habr]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/habr.list"
           SOURCES[4PDA]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/4pda.list"
           SOURCES[Notion]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/notion.list"
           SOURCES[Flibusta]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/flibusta.list"
           SOURCES[Proton]="https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/protonmail.list"
 
-          ORDER="Habr 4PDA Notion Flibusta Proton"
+          ORDER="4PDA Notion Flibusta Proton"
 
           for name in $ORDER; do
             echo "-> Downloading $name"
@@ -50,32 +48,11 @@ jobs:
               echo >> source_tmp.txt
             done
 
-            # Habr
-            if [ "$name" = "Habr" ]; then
-              cat << 'EOF' >> source_tmp.txt
-          +.habr.ru
-          +.habrahabr.ru
-          +.hsto.org
-          EOF
-            fi
-
-            sed -i 's/^[ \t]*//' source_tmp.txt
             grep -v '^[[:space:]]*$' source_tmp.txt | sort -u >> "$LIST_FILE"
             echo >> "$LIST_FILE"
           done
 
           rm -f source_tmp.txt
-
-          # 2. Cтатичные домены
-          echo "-> Adding custom static domains"
-
-          cat << 'EOF' >> "$LIST_FILE"
-          # Ntc.party
-          ntc.party
-          EOF
-
-          sed -i 's/^[ \t]*//' "$LIST_FILE"
-
           grep -qvE '^(#|[[:space:]]*$)' "$LIST_FILE" || { echo "::error::$LIST_FILE пуст!"; exit 1; }
 
           echo "Итого строк в $LIST_FILE:"
