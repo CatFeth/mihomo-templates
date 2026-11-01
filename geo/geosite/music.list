@@ -1,11 +1,4 @@
 # Spotify
-audio-ak-spotify-com.akamaized.net
-audio4-ak-spotify-com.akamaized.net
-cdn-spotify-experiments.conductrics.com
-heads-ak-spotify-com.akamaized.net
-heads4-ak-spotify-com.akamaized.net
-spotify.map.fastly.net
-spotify.map.fastlylb.net
 +.byspotify.com
 +.lifeatspotify.com
 +.pscdn.co
@@ -13,6 +6,7 @@ spotify.map.fastlylb.net
 +.spoti.fi
 +.spotify-everywhere.com
 +.spotify.com
++.spotify.com.edgesuite.net
 +.spotify.design
 +.spotify.link
 +.spotifycdn.com
@@ -23,30 +17,16 @@ spotify.map.fastlylb.net
 +.spotifyforvendors.com
 +.spotifyjobs.com
 +.tospotify.com
-+.spotify.com.edgesuite.net
 adeventtracker.spotify.com
 adstudio-assets.scdn.co
+audio-ak-spotify-com.akamaized.net
+audio4-ak-spotify-com.akamaized.net
 bloodhound.spotify.com
-
-# Apple Music
-+.applemusic.berlin
-+.applemusic.co
-+.applemusic.com
-+.applemusic.hamburg
-+.applemusic.wang
-+.applemusicconnect.com
-+.applemusicfestival.com
-+.musickit.net
-+.wwwapplemusic.com
-+.applemusic.com.au
-+.music.apple.com
-amp-api-edge.music.apple.com
-amp-api.music.apple.com
-js-cdn.music.apple.com
-music.apple.com
-musicstatus.music.apple.com
-play.music.apple.com
-speedysub.music.apple.com
+cdn-spotify-experiments.conductrics.com
+heads-ak-spotify-com.akamaized.net
+heads4-ak-spotify-com.akamaized.net
+spotify.map.fastly.net
+spotify.map.fastlylb.net
 
 # SoundCloud
 +.sndcdn.com
@@ -57,16 +37,19 @@ speedysub.music.apple.com
 +.deezer.com
 +.dzcdn.net
 
+# Bandcamp
++.bandcamp.com
++.bcbits.com
+
 # Tidal
 +.tidal.com
 +.tidalhifi.com
 +.wimpmusic.com
 
-# Bandcamp
-+.bandcamp.com
-+.bcbits.com
-
 # Kugou
++.ads.service.kugou.com
++.adserviceretry.kglink.cn
++.adserviceretry.kugou.com
 +.fanxingliveshow.com
 +.kgimg.com
 +.kglink.cn
@@ -83,6 +66,15 @@ speedysub.music.apple.com
 +.kugoustore.com
 +.kugouvoice.com
 +.kugouyouth.com
-+.ads.service.kugou.com
-+.adserviceretry.kglink.cn
-+.adserviceretry.kugou.com
+
+# AppleMusic
++.applemusic.com
++.blobstore.apple.com
++.music.apple.com
+aod-ssl.itunes.apple.com
+aod.itunes.apple.com
+audio-ssl.itunes.apple.com
+audio.itunes.apple.com
+mvod.itunes.apple.com
+streamingaudio.itunes.apple.com
+
