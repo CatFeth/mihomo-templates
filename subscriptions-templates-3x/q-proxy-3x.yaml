@@ -114,7 +114,7 @@ tun:
 
 dns:
   enable: true
-  ipv6: false
+  ipv6: true
   enhanced-mode: fake-ip
   cache-algorithm: arc
   prefer-h3: false
@@ -123,8 +123,9 @@ dns:
     - rule-set:geosite-private
     - rule-set:geosite-fake-ip
   default-nameserver: *dns_ru
-  nameserver: *dns_proxy
   proxy-server-nameserver: *dns_ru
+  direct-nameserver: *dns_ru
+  nameserver: *dns_proxy
   fallback:
     *dns_ru
   fallback-filter:
@@ -140,7 +141,7 @@ dns:
 proxy-providers:
   sub:
     type: http
-    url: https://${DOMAIN}/${SUB_PATH}/${SUB_ID}?provider=1 # Вставить ссылку из файла /var/www/subpage/clash.yaml.tpl
+    url: https://${DOMAIN}/${SUB_PATH}/${SUB_ID}?provider=1
     path: ./proxy_providers/base64.yml
     interval: 3600
     override:
