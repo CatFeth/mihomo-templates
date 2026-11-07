@@ -1,0 +1,42 @@
+payload:
+  # Habr
+  - DOMAIN-KEYWORD,habr
+
+  # HDRezka & Voidboost
+  - DOMAIN-KEYWORD,hdrezka
+  - DOMAIN-KEYWORD,voidboost
+  - DOMAIN-SUFFIX,rezka.ag
+  - DOMAIN-SUFFIX,rezka.fi
+  - DOMAIN-SUFFIX,rezka.cc
+  - DOMAIN-SUFFIX,rezka.me
+  - DOMAIN-SUFFIX,rezka.tv
+  - DOMAIN-SUFFIX,hdrzk.org
+  - DOMAIN-SUFFIX,voidslam.org
+
+  # 4PDA
+  - DOMAIN-SUFFIX,4pda.to
+  - DOMAIN-SUFFIX,4pda.ru
+
+  # Notion
+  - DOMAIN-SUFFIX,notion-static.com
+  - DOMAIN-SUFFIX,notion-status.com
+  - DOMAIN-SUFFIX,notion.com
+  - DOMAIN-SUFFIX,notion.new
+  - DOMAIN-SUFFIX,notion.site
+  - DOMAIN-SUFFIX,notion.so
+  - DOMAIN-SUFFIX,notionusercontent.com
+
+  # Flibusta
+  - DOMAIN-SUFFIX,flibusta.is
+  - DOMAIN-SUFFIX,flisland.net
+
+  # Proton
+  - DOMAIN-SUFFIX,pm.me
+  - DOMAIN-SUFFIX,proton.me
+  - DOMAIN-SUFFIX,protonmail.ch
+  - DOMAIN-SUFFIX,protonmail.com
+  - DOMAIN-SUFFIX,protonstatus.com
+  - DOMAIN-SUFFIX,protontech.ch
+  - DOMAIN-SUFFIX,protonvpn.ch
+  - DOMAIN-SUFFIX,protonvpn.com
+  - DOMAIN-SUFFIX,protonweb.com
