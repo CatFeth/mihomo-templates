@@ -40,3 +40,7 @@ payload:
   - DOMAIN-SUFFIX,protonvpn.ch
   - DOMAIN-SUFFIX,protonvpn.com
   - DOMAIN-SUFFIX,protonweb.com
+
+  # 7TV
+  - DOMAIN-SUFFIX,7tv.app
+  - DOMAIN-SUFFIX,7tv.io
